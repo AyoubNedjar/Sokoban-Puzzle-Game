@@ -1,4 +1,44 @@
 body{
     color: red;
 }
+h1{
+    background-color: black;
+    text-align: center;
+}
+footer{
+    display: flex;
+    background-color: red;
+    justify-content: space-around;
+}
+footer p {
+    color: black;
+}
 
+.square{
+    height: 30px;
+    width: 30px;
+}
+
+.joueur{
+   
+    background-color: green;
+}
+.cible{
+    
+    background-color: black;
+}
+.boite{
+   
+    background-color: blue;
+
+}
+.boitesurcible{
+    
+    background-color: rgb(204, 5, 187);
+
+}
+.mur{
+    
+    background-color: gray;
+
+}
