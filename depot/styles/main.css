@@ -7,11 +7,12 @@ h1{
 }
 footer{
     display: flex;
-    background-color: red;
+    background-color: black;
     justify-content: space-around;
 }
 footer p {
-    color: black;
+    color: red;
+   
 }
 
 .square{
@@ -25,7 +26,7 @@ footer p {
 }
 .cible{
     
-    background-color: black;
+    background-color: yellow;
 }
 .boite{
    
@@ -41,4 +42,16 @@ footer p {
     
     background-color: gray;
 
+}
+.sol{
+    background-color: red;
+}
+
+.forflex{
+    display: flex;
+}
+
+
+/*#world:nth-child(2){
+    display: flex;
 }
