@@ -136,58 +136,7 @@
 },
 ];
 
-/**
- * 
- * @param {number} level 
- * level est un nombre donc un indice dans le tableau  
- */
-function buildLevel(level){
-console.log((levels[level].map));
 
-
-    for(let i = 0;i<levels[level].map.length;i++){//boucle pour les lignes 
-
-        $('#world').append('<div  class="ligne'+i+' forflex" ></div>'); //création de la div pour chaque ligne
-
-        for(let j =0;j<levels[level].map[i].length;j++){//boucle pour les colonnes
-
-            let élément = levels[level].map[i][j]
-
-            if(élément=="x"){
-                $(".ligne"+i).append('<div  class=" cible square" ></div>');//création case jaune
-                 
-            }else if(élément=="#"){
-                $(".ligne"+i).append('<div  class=" boite square" ></div>');//création case bleu
-            }else if(élément=="@"){
-                $(".ligne"+i).append('<div  class=" boitesurcible square" ></div>');//création case rose
-            }else if(élément=="🧍".charAt(0) || élément=="🧍".charAt(1)){
-
-                $(".ligne"+i).append('<div  class=" joueur square" ></div>');//création case verte
-            }else if(élément==" "){
-                $(".ligne"+i).append('<div  class=" sol square" ></div>');//création de div pour chaque case d'une ligne
-            }else {
-                $(".ligne"+i).append('<div  class=" mur square" ></div>');//création de div pour chaque case d'une ligne
-         
-            };
-       
-      };
-
-      
-    };
-    
-    let maliste = document.getElementsByClassName("joueur");
-    maliste[1].remove();
-    
-}; 
- 
-
-
-
-
-
-$(function(){
-    buildLevel(0); 
-});
 
 
 
