@@ -247,7 +247,8 @@ console.log("hello world");
                     $(".row"+inew+jnew).addClass('joueur');
                     break;       
 
-                    default: alert('vous avez toucher un mur');
+                    default: 
+                    alert('vous avez toucher un mur');
             }
         }
     }
@@ -259,7 +260,13 @@ console.log("hello world");
 
     
     move(event);
-    /*for(let i = 0;i<levels[level].map.length;i++){
+    
+     
+    });
+});
+
+
+/*for(let i = 0;i<levels[level].map.length;i++){
             
         for(let j = 0;j<levels[level].map[i].length;j++){
 
@@ -319,9 +326,6 @@ console.log("hello world");
         }    
     }
    */
-     
-    });
-});
        
   
 
