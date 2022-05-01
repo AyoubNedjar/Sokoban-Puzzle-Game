@@ -17,154 +17,85 @@ console.log("hello world");
     
             for(let j =0;j<levels[level].map[i].length;j++){//boucle pour les colonnes
     
+                
+
                 let élément = levels[level].map[i][j]
-    
+                
                 if(élément=="x"){
-                    $(".ligne"+i).append('<div  class=" cible square row'+i+j+'+" ></div>');//création case jaune
+                    $(".ligne"+i).append('<div  class=" cible square " ></div>');//création case jaune
                      
                 }else if(élément=="#"){
-                    $(".ligne"+i).append('<div  class=" boite square row'+i+j+'" ></div>');//création case bleu
+                    $(".ligne"+i).append('<div  class=" boite square " ></div>');//création case bleu
                 }else if(élément=="@"){
-                    $(".ligne"+i).append('<div  class=" boitesurcible square row'+i+j+'" ></div>');//création case rose
+                    $(".ligne"+i).append('<div  class=" boitesurcible square " ></div>');//création case rose
                 }else if(élément=="🧍".charAt(0) || élément=="🧍".charAt(1)){
     
-                    $(".ligne"+i).append('<div  class=" joueur square row'+i+j+'" ></div>');//création case verte
+                    $(".ligne"+i).append('<div  class=" joueur square " ></div>');//création case verte
+
+                    
+
                 }else if(élément==" "){
-                    $(".ligne"+i).append('<div  class=" sol square row'+i+j+'" ></div>');//création de div pour chaque case d'une ligne
+                    $(".ligne"+i).append('<div  class=" sol square " ></div>');//création de div pour chaque case d'une ligne
                 }else {
-                    $(".ligne"+i).append('<div  class=" mur square row'+i+j+'" ></div>');//création de div pour chaque case d'une ligne
+                    $(".ligne"+i).append('<div  class=" mur square " ></div>');//création de div pour chaque case d'une ligne
              
                 };
 
-                //rejout de classe row pour les cibler comme case et faire des actions sur elles 
-           
-          };
-    
-          
+                //rajoute de classe row pour les cibler comme case et faire des actions sur elles
+          };  
         };
-        
         let maliste = document.getElementsByClassName("joueur");
-        maliste[1].remove();
-        
+        maliste[1].remove();  
     }; 
     
-     /*********************************************************************************** */
-    /**
-     * 
-    * @param {Number} x 
-    * @param {Number} y 
-    */
-    function Position(x,y){
-        this.x = x,
-        this.y = y;
 
-        
-    }
 
-    /************************************************************************************* */
+    /*************************** */
+    //objet position
+      let position = {
+          x:0,
+          y:0
+      }
+
+    /*************************** */
    
 
-    
-    function getPlayerPosition(){
-        for(let i = 0;i<levels[level].map.length;i++){
-            
-            for(let j = 0;j<levels[level].map[i].length;j++){
-                let élément = levels[level].map[i][j];
-
-                if(élément=="🧍".charAt(0)){
-                    return new Position(i,j);
-                }
-            }
-
-        }
-    };
-
     /**
-     * 
-     * @param {String} jdiv 
-     * @returns 
+     * give the position ofthe player 
+     * @returns the position of the player
      */
-    function getPosition(jdiv){
-        for(let i = 0;i<levels[level].map.length;i++){
-            
-            for(let j = 0;j<levels[level].map[i].length;j++){
-                let élément = levels[level].map[i][j];
-
-                if(élément==jdiv){
-                    return new Position(i,j);
-                }
-            }
-
-        }
+    function getPlayerPosition(){
+       
+        position= {
+           x: $('.joueur').parent().index(),//récupere l'indice de la ligne dont il se trouve 
+           y :$('.joueur').index() //récupere la colonne ou il se trouve sur la ligne
+       }
+       return position;
+       
     };
 
+
+    
+
     /**
-     * 
-     * @param {Position} position 
+     * give the square depending the position in parameter
+     * @param {position} position a position
+     * @return a object Jquery like a square
      */
     function getSquareAt(position){
        let i = position.x;
        let j = position.y;
-       
-       return levels[level].map[i][j];
+
+       let ligne = $('#world').children().eq(i);
+       let squarepos = $(ligne).children().eq(j);//on a viser la position voulue
+       console.log(squarepos)
+       return squarepos;
+    
     }
 
+    
 
-    /**
-     * 
-     * @param {*} event 
-     */
-    function move(event){
-        let posjoueur = getPlayerPosition();
-        
-        //on récupere la position du joueur et on va appeler la methode movbis qui va faire le déplacement
-        switch (event.key) {
-            
-            
-            case "ArrowLeft":
-                let lastx = posjoueur.x;
-                let lasty = posjoueur.y;
-                
-                let newx = posjoueur.x;
-                let newy = posjoueur.y-1;
 
-                    movebis(lastx,lasty,newx,newy,event)
-                    
-                break;
-            case "ArrowRight":
-                  
-                 lastx = posjoueur.x;
-                 lasty = posjoueur.y;
-                 newx = posjoueur.x;
-                 newy = posjoueur.y+1;
-
-                movebis(lastx,lasty,newx,newy,event);
-
-                break;
-            case "ArrowUp":
-                  
-                lastx = posjoueur.x;
-                lasty = posjoueur.y;
-                newx = posjoueur.x-1;
-                newy = posjoueur.y;
-
-                    movebis(lastx,lasty,newx,newy,event)
-                
-                break;
-            case "ArrowDown":
-                  
-                lastx = posjoueur.x;
-                lasty = posjoueur.y;
-                newx = posjoueur.x+1;
-                newy = posjoueur.y;
-
-                    movebis(lastx,lasty,newx,newy,event)
-                
-                break;
-        }
-       
-
-    }
 
     /**
      * Methode qui va servir a faire les déplacement selon les direction
@@ -172,98 +103,492 @@ console.log("hello world");
      * @param {Number} jlast ancien indice j
      * @param {Number} inew new indice i
      * @param {Number} jnew new indice j
-     * @param {*} event new indice j
+     * 
      */
-    function movebis(ilast,jlast,inew,jnew,event){//va déplacer la case en fonction des indices de direction de la
+    function movebis(ilast,jlast,inew,jnew){//va déplacer la case en fonction des indices de direction de la
+        let playernewpos = {        //nouvelle pos du joueur
+            x:inew,
+            y:jnew,
+        }
+
+        let playerlastpos = {       //ancienne pos du joueur
+            x : ilast,
+            y : jlast,
+        }
+
+        let lastpos = getSquareAt(playerlastpos);//enregistre la case ou est placer le joueur
+
+        let newpos  = getSquareAt(playernewpos);//enregistre la case ou doit se déplacer le joueur
         
-
-        let newpos  = levels[level].map[inew][jnew];
         
-       
-        if(newpos=="🧍".charAt(1) && event.key=="ArrowRight"){
-            $(".row"+ilast+jlast).removeClass('joueur');//mettre un sl a l ancienne position
-            $(".row"+ilast+jlast).addClass('sol');
-
-
-            jnew = jnew+1;
-            $(".row"+inew+jnew).removeClass('boite cible boitesurcible');//on met des +1 si l'evenement c'est d'aller à droite on met +1 au y pour 
-            $(".row"+inew+jnew).addClass('joueur');//pour que ca ne prenne pas la case du deuxieme joueur
-
-        }else if(newpos=="🧍".charAt(1) && event.key=="ArrowLeft"){
-            $(".row"+ilast+jlast).removeClass('joueur');//mettre un sl a l ancienne position
-            $(".row"+ilast+jlast).addClass('sol');
-
-            jnew = jnew-1
-            $(".row"+inew+jnew).removeClass('boite cible boitesurcible ');// si l'evenement c'est d'aller à gauche on met -1 au y pour 
-            $(".row"+inew+jnew).addClass('joueur')
-
-        }else if(newpos=="🧍".charAt(1) && event.key=="ArrowUp"){
-            $(".row"+ilast+jlast).removeClass('joueur');//mettre un sol a l ancienne position
-            $(".row"+ilast+jlast).addClass('sol');
-
-            inew =inew-1;
-            $(".row"+inew+jnew).removeClass('boite cible boitesurcible ');// si l'evenement c'est d'aller en haut  on met -1 au x pour 
-            $(".row"+inew+jnew).addClass('joueur');//pour que ca ne prenne pas la case du deuxieme joueur
-
-        }else if(newpos=="🧍".charAt(1) && event.key=="ArrowDown"){
-            $(".row"+ilast+jlast).removeClass('joueur');//mettre un sol a l ancienne position
-            $(".row"+ilast+jlast).addClass('sol');
-
-            inew =inew+1;
-            $(".row"+inew+jnew).removeClass('boite cible boitesurcible ');// si l'evenement c'est d'aller en bas on met +1 au x pour 
-            $(".row"+inew+jnew).addClass('joueur');//pas  que ca ne prenne pas la case du deuxieme joueur
-        }else{
-            switch (newpos){
-            
-                case ' ': 
-                    $(".row"+ilast+jlast).removeClass('joueur');        //supprimer la classe joueur de l'ancienne position
-                    $(".row"+ilast+jlast).addClass('sol');
+            if(newpos.hasClass('sol')){
+                    $(lastpos).removeClass('joueur');        //supprimer la classe joueur de l'ancienne position
+                    $(lastpos).addClass('sol');
     
                //mettre la nouvelle case comme une case joueur et si la nouvelle case est un sol supprimer la classe sol de la nouvelle case
-                    $(".row"+inew+jnew).removeClass('sol');
-                    $(".row"+inew+jnew).addClass('joueur');
-    
-                case "#":
-                    $(".row"+ilast+jlast).removeClass('joueur');
-                    $(".row"+ilast+jlast).addClass('sol');
-    
-                    $(".row"+inew+jnew).removeClass('boite');
-                    $(".row"+inew+jnew).addClass('joueur');
-                    break;
-    
-                case "@" : 
-                    $(".row"+ilast+jlast).removeClass('joueur');
-                    $(".row"+ilast+jlast).addClass('sol');
-               
-                    $(".row"+inew+jnew).removeClass('boite');
-                    $(".row"+inew+jnew).addClass('joueur');
-                    break;
-    
-                case  "x" :
-                    $(".row"+ilast+jlast).removeClass('joueur');
-                    $(".row"+ilast+jlast).addClass('sol');
-               
-                    $(".row"+inew+jnew).removeClass('boite');
-                    $(".row"+inew+jnew).addClass('joueur');
-                    break;       
+                    $(newpos).removeClass('sol');
+                    $(newpos).addClass('joueur');
 
-                    default: 
-                    alert('vous avez toucher un mur');
+            }else if(newpos.hasClass('boite')){
+                    
+                    $(lastpos).removeClass('joueur');  //supprimer la classe joueur de l'ancienne position
+                    $(lastpos).addClass('sol');
+    
+               //mettre la nouvelle case comme une case joueur et si la nouvelle case est un sol supprimer la classe sol de la nouvelle case
+                    $(newpos).removeClass('boite');
+                    $(newpos).addClass('joueur');
+
+            }else if(newpos.hasClass('boitesurcible')){
+                    $(lastpos).removeClass('joueur');        //supprimer la classe joueur de l'ancienne position
+                    $(lastpos).addClass('sol');
+
+            //mettre la nouvelle case comme une case joueur et si la nouvelle case est un sol supprimer la classe sol de la nouvelle case
+                    $(newpos).removeClass('boitesurcible');
+                    $(newpos).addClass('joueur');
+            }else if(newpos.hasClass('cible')){
+                $(lastpos).removeClass('joueur');        //supprimer la classe joueur de l'ancienne position
+                $(lastpos).addClass('sol');
+
+        //mettre la nouvelle case comme une case joueur et si la nouvelle case est un sol supprimer la classe sol de la nouvelle case
+                $(newpos).removeClass('cible');
+                $(newpos).addClass('joueur');
             }
+            
+                
         }
-    }
 
+/**
+ * @param {_KeyboardEvent} event
+ * 
+ */
+    function move(event){
+        
+        
+        let posjoueur = getPlayerPosition();
+        //on récupere la position du joueur et on va appeler la methode movbis qui va faire le déplacement
+        let lastx = posjoueur.x;
+        let lasty = posjoueur.y;
+        let newx;
+        let newy;
+        switch (event.key) {  
+            
+            
+            case "ArrowLeft":
+                
+                
+                 newx = posjoueur.x;
+                 newy = posjoueur.y-1;
+
+                movebis(lastx,lasty,newx,newy)
+                    
+                break;
+            case "ArrowRight":
+                  
+                 newx = posjoueur.x;
+                 newy = posjoueur.y+1;
+
+                movebis(lastx,lasty,newx,newy);
+
+                break;
+            case "ArrowUp":
+                  
+                newx = posjoueur.x-1;
+                newy = posjoueur.y;
+
+                    movebis(lastx,lasty,newx,newy)
+                
+                break;
+            case "ArrowDown":
+                  
+                newx = posjoueur.x+1;
+                newy = posjoueur.y;
+
+                    movebis(lastx,lasty,newx,newy)
+                
+                break;
+        }
+       
+    }
+    
+
+
+    
     $(function(){
     buildLevel(level);
-    window.addEventListener('keydown', function(event){//va recuperer les événements de clavier
-    console.log(event);
 
-    
-    move(event);
-    
-     
+    window.addEventListener('keydown', function(event){//va recuperer les événements de clavier
+        console.log(event);
+
+       move(event);
+        
+        
     });
+    
+    
 });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 /*for(let i = 0;i<levels[level].map.length;i++){
@@ -330,3 +655,45 @@ console.log("hello world");
   
 
    
+
+
+
+
+
+
+
+
+    /*if(newpos==caseboite && event.key=="ArrowRight"){
+            //mettre un sol a l ancienne position
+            $(".row"+ilast+jlast).addClass('sol');
+            $('.joueur').removeClass('joueur');
+
+
+            jnew = jnew+1;
+            $(".row"+inew+jnew).removeClass('boite cible boitesurcible');//on met des +1 si l'evenement c'est d'aller à droite on met +1 au y pour 
+            $(".row"+inew+jnew).addClass('joueur');//pour que ca ne prenne pas la case du deuxieme joueur
+
+        }else if(newpos=="🧍".charAt(1) && event.key=="ArrowLeft"){
+            $(".row"+ilast+jlast).removeClass('joueur');//mettre un sl a l ancienne position
+            $(".row"+ilast+jlast).addClass('sol');
+
+            jnew = jnew-1
+            $(".row"+inew+jnew).removeClass('boite cible boitesurcible ');// si l'evenement c'est d'aller à gauche on met -1 au y pour 
+            $(".row"+inew+jnew).addClass('joueur')
+
+        }else if(newpos=="🧍".charAt(1) && event.key=="ArrowUp"){
+            $(".row"+ilast+jlast).removeClass('joueur');//mettre un sol a l ancienne position
+            $(".row"+ilast+jlast).addClass('sol');
+
+            inew =inew-1;
+            $(".row"+inew+jnew).removeClass('boite cible boitesurcible ');// si l'evenement c'est d'aller en haut  on met -1 au x pour 
+            $(".row"+inew+jnew).addClass('joueur');//pour que ca ne prenne pas la case du deuxieme joueur
+
+        }else if(newpos=="🧍".charAt(1) && event.key=="ArrowDown"){
+            $(".row"+ilast+jlast).removeClass('joueur');//mettre un sol a l ancienne position
+            $(".row"+ilast+jlast).addClass('sol');
+
+            inew =inew+1;
+            $(".row"+inew+jnew).removeClass('boite cible boitesurcible ');// si l'evenement c'est d'aller en bas on met +1 au x pour 
+            $(".row"+inew+jnew).addClass('joueur');//pas  que ca ne prenne pas la case du deuxieme joueur
+        }else{*/
