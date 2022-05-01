@@ -1,6 +1,8 @@
 body{
     color: red;
+    
 }
+
 h1{
     background-color: black;
     text-align: center;
@@ -53,8 +55,12 @@ footer p {
 .forflex{
     display: flex;
 }
-
-
-/*#world:nth-child(2){
-    display: flex;
+#compteur{
+    background-color: red;
+    margin-left: 130px;
 }
+#nbcompteur{
+    background-color: yellow;
+}
+
+

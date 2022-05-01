@@ -1,6 +1,8 @@
 "use strict";
 
 const level = 3;
+let compteur = 0;
+
 console.log("hello world");
 /**
  * 
@@ -142,9 +144,9 @@ console.log("hello world");
                 //vérification qu'on puisse se déplacer ou non 
                 if(newpos.hasClass('boite') && twonextpos.hasClass('boite') 
                     || newpos.hasClass('boitesurcible')&& twonextpos.hasClass('boitesurcible')
-                    ||newpos.hasClass('boite') && twonextpos.hasClass('mur') 
+                    || newpos.hasClass('boite') && twonextpos.hasClass('mur') 
                     || newpos.hasClass('boitesurcible') && twonextpos.hasClass('mur')
-                    ||newpos.hasClass('boite') && twonextpos.hasClass('boitesurcible') 
+                    || newpos.hasClass('boite') && twonextpos.hasClass('boitesurcible') 
                     || newpos.hasClass('boitesurcible') && twonextpos.hasClass('boite')){
 
                 autorisé = false;
@@ -152,33 +154,46 @@ console.log("hello world");
                 }
                     
                         
-                if( autorisé && newpos.hasClass('boite') && twonextpos.hasClass('cible') ){//pousser une boite vers une cible
+                if(autorisé && newpos.hasClass('boite') && twonextpos.hasClass('cible') ){//pousser une boite vers une cible
 
                     $(lastpos).removeClass('joueur');        //supprimer la classe joueur de l'ancienne position
-                    
+                    $(lastpos).addClass('sol');
+
                     $(newpos).removeClass('boite'); 
                     $(newpos).addClass('joueur');
 
                     $(twonextpos).addClass('boitesurcible');
 
                 }else if(autorisé && newpos.hasClass('boitesurcible') 
-                    && twonextpos.hasClass('cible')){       //pour pousser une boite sur cible vers une boite sur cible
+                    && twonextpos.hasClass('cible')){       //pour pousser une boite sur cible vers  une cible
                        
-                    $(lastpos).removeClass('joueur');
-                        
-                    $(newpos).removeClass('boitesurcible'); 
-                    $(newpos).addClass('joueur');
+                    if(lastpos.hasClass('sol')){
+                        $(lastpos).removeClass('joueur');
+                        $(newpos).removeClass('boitesurcible'); 
+                        $(newpos).addClass('joueur');
                     
-                    $(twonextpos).addClass('boitesurcible');
+                        $(twonextpos).addClass('boitesurcible');
+                    }else{
+                        $(lastpos).removeClass('joueur');
+                        $(lastpos).addClass('cible');
+                        
+                        $(newpos).removeClass('boitesurcible'); 
+                        $(newpos).addClass('joueur');
+                    
+                        $(twonextpos).addClass('boitesurcible');
+                    }
+                    
                            
-                }else if( autorisé && newpos.hasClass('boitesurcible') && twonextpos.hasClass('cible')){ 
+                }else if(autorisé && newpos.hasClass('boitesurcible') && twonextpos.hasClass('sol')){ 
                                                             //pour pousser une boite sur cible vers un sol
-
+                    
                     $(lastpos).removeClass('joueur');        
-                    $(lastpos).addClass('sol');
-    
-                    $(newpos).addClass('joueur');
+                    
 
+                    $(newpos).addClass('joueur');
+                    $(newpos).removeClass('boitesurcible');
+
+                    
                     $(twonextpos).addClass('boite');
 
                 }else if(autorisé && newpos.hasClass('boite') && twonextpos.hasClass('sol')){
@@ -202,14 +217,24 @@ console.log("hello world");
 
                 }else if(autorisé && newpos.hasClass('cible')){//pour avancer sur les cibles
 
-                    $(lastpos).removeClass('joueur');        
-                    $(newpos).addClass('joueur');
+                    if(lastpos.has('sol')){//pour ne pas ajouter une classe cible si au daprt c'est un sol
+
+                        $(lastpos).removeClass('joueur'); 
+                        $(newpos).addClass('joueur');
+                    }else{
+                        $(lastpos).removeClass('joueur');    
+                        $(lastpos).addClass('cible')
+                        $(newpos).addClass('joueur');
+                    }
+                    
                 }
             
         }
         
    
     }
+
+    
 
 /**
  * @param {_KeyboardEvent} event
@@ -231,7 +256,7 @@ console.log("hello world");
             
             
             case "ArrowLeft":
-                
+                compteur++;
                 
                  newx = posjoueur.x;
                  newy = posjoueur.y-1;
@@ -244,7 +269,7 @@ console.log("hello world");
                     
                 break;
             case "ArrowRight":
-                
+                compteur++;
                   
                  newx = posjoueur.x;
                  newy = posjoueur.y+1;
@@ -255,7 +280,7 @@ console.log("hello world");
 
                 break;
             case "ArrowUp":
-                  
+                  compteur++;
                 newx = posjoueur.x-1;
                 newy = posjoueur.y;
 
@@ -265,7 +290,7 @@ console.log("hello world");
                 
                 break;
             case "ArrowDown":
-                  
+                  compteur++;
                 newx = posjoueur.x+1;
                 newy = posjoueur.y;
 
@@ -278,6 +303,10 @@ console.log("hello world");
         }
        
     }
+
+    function incrMoves(){
+        $('#nbcompteur').text(compteur);
+    }
     
 
 
@@ -288,7 +317,9 @@ console.log("hello world");
     window.addEventListener('keydown', function(event){//va recuperer les événements de clavier
         console.log(event);
         
+        
        move(event)
+       incrMoves();
       
         
         
