@@ -20,9 +20,10 @@ footer p {
     width: 30px;
 }
 
-.joueur{
-   
-    background-color: green;
+
+
+.sol{
+    background-color: red;
 }
 .cible{
     
@@ -43,8 +44,10 @@ footer p {
     background-color: gray;
 
 }
-.sol{
-    background-color: red;
+
+.joueur{
+   
+    background-color: green;
 }
 
 .forflex{

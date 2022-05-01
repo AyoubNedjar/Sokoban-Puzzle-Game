@@ -1,6 +1,6 @@
 "use strict";
 
-const level = 0;
+const level = 3;
 console.log("hello world");
 /**
  * 
@@ -98,14 +98,16 @@ console.log("hello world");
 
 
     /**
-     * Methode qui va servir a faire les déplacement selon les direction
+     * make the moves depending directions
      * @param {Number} ilast ancien indice i
      * @param {Number} jlast ancien indice j
      * @param {Number} inew new indice i
      * @param {Number} jnew new indice j
+     * @param {Number} twonextx pour vérifier 2 cases plus loins
+     * @param {Number} twonexty
      * 
      */
-    function movebis(ilast,jlast,inew,jnew){//va déplacer la case en fonction des indices de direction de la
+    function movebis(ilast,jlast,inew,jnew,twonextx,twonexty){//va déplacer la case en fonction des indices de direction de la
         let playernewpos = {        //nouvelle pos du joueur
             x:inew,
             y:jnew,
@@ -116,46 +118,98 @@ console.log("hello world");
             y : jlast,
         }
 
+        let postwonext = {
+            x:twonextx,
+            y:twonexty, 
+        }
+
+        
+
         let lastpos = getSquareAt(playerlastpos);//enregistre la case ou est placer le joueur
 
         let newpos  = getSquareAt(playernewpos);//enregistre la case ou doit se déplacer le joueur
+
+        let twonextpos = getSquareAt(postwonext);//on enregistre la case après la nouvelle pour vérifier  
         
         
-            if(newpos.hasClass('sol')){
+
+        if(!newpos.hasClass('mur')){//tant qu'il n'y a pas de mur  a la prochaine case
+
+                console.log(!newpos.hasClass('mur'))
+
+                let autorisé = true;
+
+                //vérification qu'on puisse se déplacer ou non 
+                if(newpos.hasClass('boite') && twonextpos.hasClass('boite') 
+                    || newpos.hasClass('boitesurcible')&& twonextpos.hasClass('boitesurcible')
+                    ||newpos.hasClass('boite') && twonextpos.hasClass('mur') 
+                    || newpos.hasClass('boitesurcible') && twonextpos.hasClass('mur')
+                    ||newpos.hasClass('boite') && twonextpos.hasClass('boitesurcible') 
+                    || newpos.hasClass('boitesurcible') && twonextpos.hasClass('boite')){
+
+                autorisé = false;
+
+                }
+                    
+                        
+                if( autorisé && newpos.hasClass('boite') && twonextpos.hasClass('cible') ){//pousser une boite vers une cible
+
                     $(lastpos).removeClass('joueur');        //supprimer la classe joueur de l'ancienne position
-                    $(lastpos).addClass('sol');
-    
-               //mettre la nouvelle case comme une case joueur et si la nouvelle case est un sol supprimer la classe sol de la nouvelle case
-                    $(newpos).removeClass('sol');
+                    
+                    $(newpos).removeClass('boite'); 
                     $(newpos).addClass('joueur');
 
-            }else if(newpos.hasClass('boite')){
+                    $(twonextpos).addClass('boitesurcible');
+
+                }else if(autorisé && newpos.hasClass('boitesurcible') 
+                    && twonextpos.hasClass('cible')){       //pour pousser une boite sur cible vers une boite sur cible
+                       
+                    $(lastpos).removeClass('joueur');
+                        
+                    $(newpos).removeClass('boitesurcible'); 
+                    $(newpos).addClass('joueur');
                     
-                    $(lastpos).removeClass('joueur');  //supprimer la classe joueur de l'ancienne position
+                    $(twonextpos).addClass('boitesurcible');
+                           
+                }else if( autorisé && newpos.hasClass('boitesurcible') && twonextpos.hasClass('cible')){ 
+                                                            //pour pousser une boite sur cible vers un sol
+
+                    $(lastpos).removeClass('joueur');        
                     $(lastpos).addClass('sol');
     
-               //mettre la nouvelle case comme une case joueur et si la nouvelle case est un sol supprimer la classe sol de la nouvelle case
+                    $(newpos).addClass('joueur');
+
+                    $(twonextpos).addClass('boite');
+
+                }else if(autorisé && newpos.hasClass('boite') && twonextpos.hasClass('sol')){
+                                                            //pour pousser une boite vers un sol
+
+
+                    $(lastpos).removeClass('joueur');        
+                    $(lastpos).addClass('sol');
+    
                     $(newpos).removeClass('boite');
                     $(newpos).addClass('joueur');
 
-            }else if(newpos.hasClass('boitesurcible')){
-                    $(lastpos).removeClass('joueur');        //supprimer la classe joueur de l'ancienne position
+                    $(twonextpos).addClass('boite');
+
+                }else if(autorisé && newpos.hasClass('sol') ) {//pour avancer sur les sols
+
+                    $(lastpos).removeClass('joueur');        
                     $(lastpos).addClass('sol');
-
-            //mettre la nouvelle case comme une case joueur et si la nouvelle case est un sol supprimer la classe sol de la nouvelle case
-                    $(newpos).removeClass('boitesurcible');
+    
                     $(newpos).addClass('joueur');
-            }else if(newpos.hasClass('cible')){
-                $(lastpos).removeClass('joueur');        //supprimer la classe joueur de l'ancienne position
-                $(lastpos).addClass('sol');
 
-        //mettre la nouvelle case comme une case joueur et si la nouvelle case est un sol supprimer la classe sol de la nouvelle case
-                $(newpos).removeClass('cible');
-                $(newpos).addClass('joueur');
-            }
+                }else if(autorisé && newpos.hasClass('cible')){//pour avancer sur les cibles
+
+                    $(lastpos).removeClass('joueur');        
+                    $(newpos).addClass('joueur');
+                }
             
-                
         }
+        
+   
+    }
 
 /**
  * @param {_KeyboardEvent} event
@@ -170,6 +224,9 @@ console.log("hello world");
         let lasty = posjoueur.y;
         let newx;
         let newy;
+        let twonextx;
+        let twonexty;
+        
         switch (event.key) {  
             
             
@@ -179,15 +236,22 @@ console.log("hello world");
                  newx = posjoueur.x;
                  newy = posjoueur.y-1;
 
-                movebis(lastx,lasty,newx,newy)
+                 twonextx = posjoueur.x;
+                 twonexty = posjoueur.y-2;
+                 
+
+                movebis(lastx,lasty,newx,newy,twonextx,twonexty); //fonction de déplacement
                     
                 break;
             case "ArrowRight":
+                
                   
                  newx = posjoueur.x;
                  newy = posjoueur.y+1;
 
-                movebis(lastx,lasty,newx,newy);
+                 twonextx = posjoueur.x;
+                 twonexty = posjoueur.y+2;
+                movebis(lastx,lasty,newx,newy,twonextx,twonexty);
 
                 break;
             case "ArrowUp":
@@ -195,7 +259,9 @@ console.log("hello world");
                 newx = posjoueur.x-1;
                 newy = posjoueur.y;
 
-                    movebis(lastx,lasty,newx,newy)
+                twonextx = posjoueur.x-2;
+                twonexty  = posjoueur.y;
+                    movebis(lastx,lasty,newx,newy,twonextx,twonexty);
                 
                 break;
             case "ArrowDown":
@@ -203,7 +269,10 @@ console.log("hello world");
                 newx = posjoueur.x+1;
                 newy = posjoueur.y;
 
-                    movebis(lastx,lasty,newx,newy)
+                twonextx = posjoueur.x+2;
+                twonexty = posjoueur.y;
+
+                    movebis(lastx,lasty,newx,newy,twonextx,twonexty)
                 
                 break;
         }
@@ -218,8 +287,9 @@ console.log("hello world");
 
     window.addEventListener('keydown', function(event){//va recuperer les événements de clavier
         console.log(event);
-
-       move(event);
+        
+       move(event)
+      
         
         
     });
