@@ -109,6 +109,10 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
 
     const twonextpos = getSquareAt(postwonext);//on enregistre la case après la nouvelle pour vérifier
 
+    if (newpos.hasClass("mur") || newpos.hasClass("boite") || newpos.hasClass("boitesurcible") && twonextpos.hasClass("mur")) {
+        compteur--;//pour empêcher le nb coups d'augmenter si mouvement pas possible
+    }
+
     if (!newpos.hasClass("mur")) {//tant qu'il n'y a pas de mur  a la prochaine case
         let autorisé = true;
 
