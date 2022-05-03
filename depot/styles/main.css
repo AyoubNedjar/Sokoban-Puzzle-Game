@@ -26,31 +26,37 @@ footer p {
 
 .sol{
     background-color: red;
+    background-image: url(../../Images/ground.png);
 }
 .cible{
     
     background-color: yellow;
+    background-image: url(../../Images/target.png);
 }
 .boite{
    
     background-color: blue;
+    background-image: url(../../Images/box.png);
 
 }
 .boitesurcible{
     
     background-color: rgb(204, 5, 187);
+    background-image: url(../../Images/box-on-target.png);
 
 }
 .mur{
-    
     background-color: gray;
-
+    background-image: url(../../Images/wall.png);
 }
 
 .joueur{
    
     background-color: green;
+    /*animation: animgauche  0.75s infinite;*/
+    background-image: url(../../Images/player-front.png);
 }
+
 
 .forflex{
     display: flex;
@@ -61,6 +67,6 @@ footer p {
 }
 #nbcompteur{
     background-color: yellow;
+    
 }
-
 

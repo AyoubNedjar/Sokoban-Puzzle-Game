@@ -127,6 +127,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
             $(lastpos).addClass("sol");
 
             $(newpos).removeClass("boite");
+            $(newpos).addClass("sol");
             $(newpos).addClass("joueur");
 
             $(twonextpos).addClass("boitesurcible");
@@ -205,7 +206,6 @@ function move(event) {
 
     case "ArrowLeft":
         compteur++;
-
         newx = posjoueur.x;
         newy = posjoueur.y - 1;
 
@@ -272,17 +272,20 @@ function initLevel() {
     $("#world").children()
         .remove();
     buildLevel(level);
-    $("#nblevel").text(`Vous êtes au niveau ${level + 1}`);
+    $(".nblevel").text(`Vous êtes au niveau ${level + 1}`);
 }
 
 function finishlevel() {
     if (level < 6) {
         initLevel();
+    } else if (level === 6 && allOnTaret()) {//si on arrive au dernier niveau et que toutes les boites sont sur cibles
+        console.log(allOnTaret());
+        $(".levelfini").text("Félicitations, vous avez fini tout le jeu !!!");
     }
 }
 
 $(function() {
-    $("#nblevel").text(`Vous êtes au niveau ${level + 1}`);
+    $(".nblevel").text(`Vous êtes au niveau ${level + 1}`);
     buildLevel(level);
     window.addEventListener("keydown", function(event) {//va recuperer les événements de clavier
         console.log(event);

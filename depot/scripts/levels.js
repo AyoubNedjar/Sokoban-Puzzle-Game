@@ -1,4 +1,4 @@
- "use strict";
+"use strict";
 
 /**
  * @typedef {Object} Level Description d'un niveau de Sokoban.
@@ -18,7 +18,7 @@
  * Structure de données *globale* pour les données concernant les différents niveaux du jeu.
  * @type {Level[]}
  */
- const levels = [{
+const levels = [{
     difficulty: "easy",
     best: 10,
     map: [
@@ -133,11 +133,4 @@
         "  └────┴───┘  ",
         "              ",
     ],
-},
-];
-
-
-
-
-
- 
+}];
