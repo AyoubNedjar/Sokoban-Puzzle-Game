@@ -17,6 +17,7 @@ footer p {
    
 }
 
+
 .square{
     height: 30px;
     width: 30px;
@@ -64,9 +65,30 @@ footer p {
 #compteur{
     background-color: red;
     margin-left: 130px;
+    border: 3px solid black;
 }
 #nbcompteur{
     background-color: yellow;
     
 }
+.resetlevel{
+    background-color: red;
+    border: 3px solid black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    
+    margin-left: 130px
+}
 
+.left{
+    background-image: url(../../Images/player-left.png);
+}
+.right{
+    background-image: url(../../Images/player-right.png);
+}
+.up{
+    background-image: url(../../Images/player-up.png);
+}
+.front{
+    background-image: url(../../Images/player-front.png);
+}

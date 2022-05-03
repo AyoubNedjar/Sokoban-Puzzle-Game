@@ -194,6 +194,8 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
  *
  */
 function move(event) {
+    deleteaAnimations();
+
     const posjoueur = getPlayerPosition();
     //on récupere la position du joueur et on va appeler la methode movbis qui va faire le déplacement
     const lastx = posjoueur.x;
@@ -217,6 +219,7 @@ function move(event) {
         twonexty = posjoueur.y - 2;
 
         movebis(lastx, lasty, newx, newy, twonextx, twonexty); //fonction de déplacement
+        getSquareAt(getPlayerPosition()).addClass("left");
 
         break;
     case "ArrowRight":
@@ -228,6 +231,8 @@ function move(event) {
         twonextx = posjoueur.x;
         twonexty = posjoueur.y + 2;
         movebis(lastx, lasty, newx, newy, twonextx, twonexty);
+        //mettre les classes apres le mouvement
+        getSquareAt(getPlayerPosition()).addClass("right");
 
         break;
     case "ArrowUp":
@@ -238,6 +243,7 @@ function move(event) {
         twonextx = posjoueur.x - 2;
         twonexty = posjoueur.y;
         movebis(lastx, lasty, newx, newy, twonextx, twonexty);
+        getSquareAt(getPlayerPosition()).addClass("up");
 
         break;
     case "ArrowDown":
@@ -249,9 +255,17 @@ function move(event) {
         twonexty = posjoueur.y;
 
         movebis(lastx, lasty, newx, newy, twonextx, twonexty);
+        getSquareAt(getPlayerPosition()).addClass("front");
 
         break;
     }
+}
+
+function deleteaAnimations() {
+    getSquareAt(getPlayerPosition()).removeClass("up");
+    getSquareAt(getPlayerPosition()).removeClass("left");
+    getSquareAt(getPlayerPosition()).removeClass("right");
+    getSquareAt(getPlayerPosition()).removeClass("front");
 }
 
 function incrMoves() {
