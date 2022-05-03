@@ -305,12 +305,13 @@ function finishlevel() {
 $(function() {
     $(".nblevel").text(`Vous êtes au niveau ${level + 1}`);
     buildLevel(level);
+    $(".resetlevel").on("click", function() {//pour recommencer le niveau
+        $("#world").children()
+            .remove();
+        buildLevel(level);
+    });
     window.addEventListener("keydown", function(event) {//va recuperer les événements de clavier
-        console.log(event);
-        console.log(level);
-
         move(event);//si on clique sur espace niveau incrémenté
-        console.log(level);
         incrMoves();
     });
 });
