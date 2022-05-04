@@ -1,6 +1,9 @@
 body{
     color: red;
-    
+}
+
+#world{
+    margin-left: 25em;
 }
 
 h1{
@@ -62,22 +65,33 @@ footer p {
 .forflex{
     display: flex;
 }
-#compteur{
+.compteur{
     background-color: red;
-    margin-left: 130px;
+    margin-left: 30em;
     border: 3px solid black;
 }
 #nbcompteur{
     background-color: yellow;
     
 }
+
+
+
 .resetlevel{
     background-color: red;
     border: 3px solid black;
     margin-top: 10px;
     margin-bottom: 10px;
     
-    margin-left: 130px
+    margin-left: 30em
+}
+.revenirarrière{
+    background-color: red;
+    border: 3px solid black;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
+    margin-left: 2.1em;
 }
 
 .left{
@@ -92,3 +106,56 @@ footer p {
 .front{
     background-image: url(../../Images/player-front.png);
 }
+
+/* faire une fenêtre modale */
+a{
+    margin-left: 1.5em;
+    background-color: red;
+    border: 3px solid black;
+    text-decoration: none;
+    border-radius: 5px;
+    color: black;
+    padding: 5px;
+
+}
+ 
+
+
+.modale{
+    visibility: hidden;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(77,77, 77, .7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modale:target{
+    visibility: visible;
+    opacity: 1;
+}
+.modal_content{
+    background-color: red;
+    padding: 1.5 2em;
+    width: 500px;
+    max-width: 90%;
+    border-radius: 4px;
+    position: relative;
+    padding-left: 0;
+   
+}
+.croix_modale{
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    color: black;
+}
+img{
+    height: 5em;
+    width: 8em;
+}
+
