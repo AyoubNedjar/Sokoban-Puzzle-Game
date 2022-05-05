@@ -339,6 +339,8 @@ function finishlevel() {
     }
 }
 
+
+
 $(function() {
     $(".nblevel").text(`Vous êtes au niveau ${level + 1}`);
     buildLevel(level);
