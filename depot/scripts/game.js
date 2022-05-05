@@ -3,6 +3,11 @@
 let level = 0;
 let compteur = 0;
 
+/**
+ * @type Array<State>
+ */
+const states = [];
+
 console.log("hello world");
 /**
  * @param {number} thelevel
@@ -88,6 +93,7 @@ function getSquareAt(theposition) {
      *
      */
 function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer la case en fonction des indices de direction de la
+    let s = undefined;
     const playernewpos = { //nouvelle pos du joueur
         x: inew,
         y: jnew,
@@ -133,7 +139,10 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
             $(newpos).removeClass("boite");
             $(newpos).addClass("sol");
             $(newpos).addClass("joueur");
-
+            //enregistrer l'état de jeu //
+            s = new State(playernewpos, postwonext);
+            states.push(s);
+            //enregistrer l'état de jeu //
             $(twonextpos).addClass("boitesurcible");
         } else if (autorisé && newpos.hasClass("boitesurcible")
                     && twonextpos.hasClass("cible")) { //pour pousser une boite sur cible vers  une cible
@@ -143,6 +152,10 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
                 $(newpos).addClass("joueur");
 
                 $(twonextpos).addClass("boitesurcible");
+                //enregistrer l'état de jeu //
+                s = new State(playernewpos, postwonext);
+                states.push(s);
+                //enregistrer l'état de jeu //
             } else { //sinon on remet une cible derriere nous
                 $(lastpos).removeClass("joueur");
                 $(lastpos).addClass("cible");
@@ -151,6 +164,10 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
                 $(newpos).addClass("joueur");
 
                 $(twonextpos).addClass("boitesurcible");
+                //enregistrer l'état de jeu //
+                s = new State(playernewpos, postwonext);
+                states.push(s);
+            //enregistrer l'état de jeu //
             }
         } else if (autorisé && newpos.hasClass("boitesurcible") && twonextpos.hasClass("sol")) {
             //pour pousser une boite sur cible vers un sol
@@ -161,6 +178,10 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
             $(newpos).removeClass("boitesurcible");
 
             $(twonextpos).addClass("boite");
+            //enregistrer l'état de jeu //
+            s = new State(playernewpos, postwonext);
+            states.push(s);
+        //enregistrer l'état de jeu //
         } else if (autorisé && newpos.hasClass("boite") && twonextpos.hasClass("sol")) {
             //pour pousser une boite vers un sol
 
@@ -171,19 +192,35 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
             $(newpos).addClass("joueur");
 
             $(twonextpos).addClass("boite");
+            //enregistrer l'état de jeu //
+            s = new State(playernewpos, postwonext);
+            states.push(s);
+        //enregistrer l'état de jeu //
         } else if (autorisé && newpos.hasClass("sol")) {//pour avancer sur les sols
             $(lastpos).removeClass("joueur");
             $(lastpos).addClass("sol");
 
             $(newpos).addClass("joueur");
+            //enregistrer l'état de jeu //
+            s = new State(playernewpos);
+            states.push(s);
+        //enregistrer l'état de jeu //
         } else if (autorisé && newpos.hasClass("cible")) {//pour avancer sur les cibles
             if (lastpos.hasClass("sol")) {//pour ne pas ajouter une classe cible si au daprt c'est un sol
                 $(lastpos).removeClass("joueur");
                 $(newpos).addClass("joueur");
+                //enregistrer l'état de jeu //
+                s = new State(playernewpos);
+                states.push(s);
+            //enregistrer l'état de jeu //
             } else {
                 $(lastpos).removeClass("joueur");
                 $(lastpos).addClass("cible");
                 $(newpos).addClass("joueur");
+                //enregistrer l'état de jeu //
+                s = new State(playernewpos);
+                states.push(s);
+            //enregistrer l'état de jeu //
             }
         }
     }
@@ -313,5 +350,6 @@ $(function() {
     window.addEventListener("keydown", function(event) {//va recuperer les événements de clavier
         move(event);//si on clique sur espace niveau incrémenté
         incrMoves();
+        console.log(states);
     });
 });
