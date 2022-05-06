@@ -10,6 +10,7 @@ const states = [];
 
 console.log("hello world");
 /**
+ * affiche le plateau de jeu
  * @param {number} thelevel
  * level est un nombre donc un indice dans le tableau.
  */
@@ -78,17 +79,16 @@ function getSquareAt(theposition) {
         .eq(i);
     const squarepos = $(ligne).children()
         .eq(j);//on a viser la position voulue
-    console.log(squarepos);
     return squarepos;
 }
 
 /**
-     * make the moves depending directions
+     * fait les déplacements en vérifiant si ils sont valides
      * @param {Number} ilast ancien indice i
      * @param {Number} jlast ancien indice j
      * @param {Number} inew new indice i
      * @param {Number} jnew new indice j
-     * @param {Number} twonextx pour vérifier 2 cases plus loins
+     * @param {Number } twonextx pour vérifier 2 cases plus loins
      * @param {Number} twonexty
      *
      */
@@ -140,7 +140,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
             $(newpos).addClass("sol");
             $(newpos).addClass("joueur");
             //enregistrer l'état de jeu //
-            s = new State(playernewpos, postwonext);
+            s = new State(playerlastpos, playernewpos);
             states.push(s);
             //enregistrer l'état de jeu //
             $(twonextpos).addClass("boitesurcible");
@@ -153,7 +153,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
 
                 $(twonextpos).addClass("boitesurcible");
                 //enregistrer l'état de jeu //
-                s = new State(playernewpos, postwonext);
+                s = new State(playerlastpos, playernewpos);
                 states.push(s);
                 //enregistrer l'état de jeu //
             } else { //sinon on remet une cible derriere nous
@@ -165,7 +165,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
 
                 $(twonextpos).addClass("boitesurcible");
                 //enregistrer l'état de jeu //
-                s = new State(playernewpos, postwonext);
+                s = new State(playerlastpos, playernewpos);
                 states.push(s);
             //enregistrer l'état de jeu //
             }
@@ -179,7 +179,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
 
             $(twonextpos).addClass("boite");
             //enregistrer l'état de jeu //
-            s = new State(playernewpos, postwonext);
+            s = new State(playerlastpos, playernewpos);
             states.push(s);
         //enregistrer l'état de jeu //
         } else if (autorisé && newpos.hasClass("boite") && twonextpos.hasClass("sol")) {
@@ -193,7 +193,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
 
             $(twonextpos).addClass("boite");
             //enregistrer l'état de jeu //
-            s = new State(playernewpos, postwonext);
+            s = new State(playerlastpos, playernewpos);
             states.push(s);
         //enregistrer l'état de jeu //
         } else if (autorisé && newpos.hasClass("sol")) {//pour avancer sur les sols
@@ -202,7 +202,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
 
             $(newpos).addClass("joueur");
             //enregistrer l'état de jeu //
-            s = new State(playernewpos);
+            s = new State(playerlastpos);
             states.push(s);
         //enregistrer l'état de jeu //
         } else if (autorisé && newpos.hasClass("cible")) {//pour avancer sur les cibles
@@ -210,7 +210,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
                 $(lastpos).removeClass("joueur");
                 $(newpos).addClass("joueur");
                 //enregistrer l'état de jeu //
-                s = new State(playernewpos);
+                s = new State(playerlastpos);
                 states.push(s);
             //enregistrer l'état de jeu //
             } else {
@@ -218,7 +218,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
                 $(lastpos).addClass("cible");
                 $(newpos).addClass("joueur");
                 //enregistrer l'état de jeu //
-                s = new State(playernewpos);
+                s = new State(playerlastpos);
                 states.push(s);
             //enregistrer l'état de jeu //
             }
@@ -227,6 +227,7 @@ function movebis(ilast, jlast, inew, jnew, twonextx, twonexty) {//va déplacer l
 }
 
 /**
+ * déplacer le joueur et les boites en fonctions de l'évenement de clavier
  * @param {KeyboardEvent} event
  *
  */
@@ -298,6 +299,9 @@ function move(event) {
     }
 }
 
+/**
+ * supprime les classes d'animations du jour pour en laisser qu'une seule
+ */
 function deleteaAnimations() {
     getSquareAt(getPlayerPosition()).removeClass("up");
     getSquareAt(getPlayerPosition()).removeClass("left");
@@ -305,10 +309,17 @@ function deleteaAnimations() {
     getSquareAt(getPlayerPosition()).removeClass("front");
 }
 
+/**
+ * incrémenteur de niveau
+ */
 function incrMoves() {
     $("#nbcompteur").text(compteur);
 }
 
+/**
+ * vérifie si toutes les boites sont sur les cibles
+ * @returns true si toutes les boites sont sur les cibles
+ */
 function allOnTaret() {
     //récupérer tout les élémet qui ont la classe cible
     const liste = document.getElementsByClassName("cible");
@@ -321,6 +332,9 @@ function allOnTaret() {
     return true;
 }
 
+/**
+ * va permettre supprimer les anciens niveau et d en creer un autre
+ */
 function initLevel() {
     level = level + 1;
     compteur = 0;
@@ -330,16 +344,74 @@ function initLevel() {
     $(".nblevel").text(`Vous êtes au niveau ${level + 1}`);
 }
 
+/**
+ * permettre de changer de niveau
+ */
 function finishlevel() {
     if (level < 6) {
         initLevel();
     } else if (level === 6 && allOnTaret()) {//si on arrive au dernier niveau et que toutes les boites sont sur cibles
-        console.log(allOnTaret());
         $(".levelfini").text("Félicitations, vous avez fini tout le jeu !!!");
     }
 }
 
+/**
+ * va permettre le retour en arrière
+ * @param {KeyboardEvent} event
+ */
+function resetMove(event) {
+    $(".revenirarrière").on("click", function() {
+        //const cpt = states.length - 1;//récupérer l'avant derniere position
+        console.log(states);
 
+        if (compteur > 0 && !allOnTaret()) {//si toute les cibles ne sont pas sur les boites.
+            compteur--;
+
+            //les positons du joueur
+            const lastplayer = states[states.length - 1].playerPosition; //la position ou le joueur doit revenir
+            const actualplayer = getPlayerPosition();//la pos actuelle du joueur.
+            console.log("l'ancienne pos du joueur est : ");
+            console.log(lastplayer);
+            console.log("la pos actuelle du joueur est : ");
+            console.log(actualplayer);
+
+            //console.log(getSquareAt(lastplayer));
+
+            //les position des boites
+            const oldPosBoite = states[states.length - 1].boxPosition;
+
+            let déplacementx = 0;
+            let déplacementy = 0;
+            if (event.key === "ArrowLeft") {
+                déplacementy = -1;
+            } else if (event.key === "ArrowRight") {
+                déplacementy = +1;
+            } else if (event.key === "ArrowDown") {
+                déplacementx = +1;
+            } else if (event.key === "ArrowUp") {
+                déplacementx = -1;
+            }
+
+            // const objectActuelBoite = {x: getPlayerPosition().x + déplacementx, y: getPlayerPosition().y + déplacementy};
+            const actualPosBoite = states[states.length - 1].boxPosition;//petit problème
+            console.log("l'ancienne pos de la boite est : ");
+            console.log(oldPosBoite);
+            console.log("la pos actuelle de la boite est : ");
+            console.log(actualPosBoite);
+
+            $("#nbcompteur").text(compteur);//compteur qui va décrémenter
+
+            getSquareAt(lastplayer).addClass("joueur");
+            getSquareAt(actualplayer).removeClass("joueur");//supprimer toutes les caractéristique du joueur
+
+            if (oldPosBoite !== undefined && actualPosBoite !== undefined) {
+                getSquareAt(oldPosBoite).addClass("boite");
+                getSquareAt(actualPosBoite).removeClass("boite boitesurcible");
+            }
+            states.pop();//supprimer le dernier élément du tableau
+        }
+    });
+}
 
 $(function() {
     $(".nblevel").text(`Vous êtes au niveau ${level + 1}`);
@@ -353,5 +425,6 @@ $(function() {
         move(event);//si on clique sur espace niveau incrémenté
         incrMoves();
         console.log(states);
+        resetMove(event);
     });
 });
